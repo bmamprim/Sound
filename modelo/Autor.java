@@ -6,10 +6,10 @@ public class Autor {
 	private String cpf, nome_original, nome_artistico;
 
 	public int get_id_autor() {
-		reutrn id_autor;
+		return id_autor;
 	} 
 
-	public void set_id_autor(String id_autor) {
+	public void set_id_autor(int id_autor) {
 		this.id_autor = id_autor;
 	}
 
