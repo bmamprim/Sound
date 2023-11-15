@@ -17,15 +17,21 @@ public class AutorDAO {
     
     public void createAutor(Autor autor){
         try {
-            String sql = "";
+            String sql = "INSERT INTO Autor VALUES (?, ?, ?)";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-                pstm.setString(1, autor.getNome_original());
-                pstm.setString(2, autor.getCpf());
+                pstm.setString(1, autor.getCpf());
+                pstm.setString(2, autor.getNome_original());
                 pstm.setString(3, autor.getNome_artistico());
 
                 pstm.execute();
+
+                try (ResultSet rst = pstm.getGeneratedKeys()) {
+                    while (rst.next()) {
+                        autor.set_id_autor(rst.getInt(1));
+                    }
+                }
             }
         } catch(SQLException e) {
             throw new RuntimeException(e);
