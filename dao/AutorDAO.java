@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import modelo.Autor;
 
@@ -40,7 +41,34 @@ public class AutorDAO {
 
     public void retrieveAutor() {};
 
-    public void retrieveAllAutores(){};
+    public ArrayList<Autor> retrieveAllAutores() {
+
+        ArrayList<Autor> autores = new ArrayList<Autor>();
+
+        try {
+            String sql = "SELECT * FROM Autor";
+
+            try(PreparedStatement pstm = connection.prepareStatement(sql)) {
+                pstm.execute();
+
+                ResultSet result = pstm.getResultSet();
+
+                while (result.next()) {
+                    int id = result.getInt("id_autor");
+                    String cpf = result.getString("cpf");
+                    String nome_original = result.getString("nome_orig");
+                    String nome_artistico = result.getString("nome_art");
+                    Autor autor = new Autor(id, cpf, nome_original, nome_artistico);
+                    autores.add(autor);
+                }
+
+            }
+
+            return autores;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    };
 
     public void deleteAutor(){};
 

@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 // import java.time.LocalDate;
 // import java.util.ArrayList;
+import java.util.ArrayList;
 
 import modelo.Autor;
 // import modelo.Pessoa;
@@ -38,6 +39,12 @@ public class Principal{
         autorDao.createAutor(autor1);
         autorDao.createAutor(autor2);
         autorDao.createAutor(autor3);
+
+        ArrayList<Autor> listaAutores = autorDao.retrieveAllAutores();
+
+        for(Autor autor : listaAutores) {
+            System.out.println(autor);
+        }
 
         // Pessoa pessoa4 = new Pessoa("Joao Correia", "00011122233", LocalDate.of(2003, 4, 15));
         // Telefone telefone40 = new Telefone(TipoTelefone.Celular,55,21,964695794);
