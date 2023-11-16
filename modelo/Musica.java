@@ -14,7 +14,7 @@ public class Musica {
 	public int get_id_musica() {
 		return id_musica;
 	}
-	public void set_id_musica(int duracao) {
+	public void set_id_musica(int id_musica) {
 		this.id_musica = id_musica;
 	}
 

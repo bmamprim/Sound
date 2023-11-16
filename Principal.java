@@ -43,7 +43,7 @@ public class Principal{
         ArrayList<Autor> listaAutores = autorDao.retrieveAllAutores();
 
         for(Autor autor : listaAutores) {
-            System.out.println(autor);
+            System.out.println(autor.getCpf() + " - " + autor.getNome_original() + " - " + autor.getNome_artistico());
         }
 
         // Pessoa pessoa4 = new Pessoa("Joao Correia", "00011122233", LocalDate.of(2003, 4, 15));

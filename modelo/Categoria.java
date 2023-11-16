@@ -6,10 +6,10 @@ public class Categoria {
 	private String nome;
 
 	public int get_id_categoria() {
-		return nome;
+		return id_categoria;
 	}
 
-	public void set_id_categoria() {
+	public void set_id_categoria(int id_categoria) {
 		this.id_categoria = id_categoria;
 	}
 
@@ -25,10 +25,8 @@ public class Categoria {
 		this.nome = nome;
 	}
 
-	public Categoria(int id_autor, String nome) {
-		this.id_categoria = id_categoria;
+	public Categoria(int id_categoria, String nome) {
 		this.nome = nome;
+		this.id_categoria = id_categoria;
 	}
-	
-	
 }
