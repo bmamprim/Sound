@@ -18,7 +18,7 @@ public class AutorDAO {
     
     public void createAutor(Autor autor){
         try {
-            String sql = "INSERT INTO Autor VALUES (default, ?, ?, ?)";
+            String sql = "INSERT INTO Autor VALUES (DEFAULT, ?, ?, ?)";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 

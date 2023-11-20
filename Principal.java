@@ -88,7 +88,7 @@ public class Principal extends JFrame{
         System.out.println(autorEspecifico.getCpf());
 
         for(Autor autor : listaAutores) {
-            System.out.println(autor.getCpf());
+            System.out.println(autor.getCpf() + " - " + autor.getNome_original() + " - " + autor.getNome_artistico());
         }
 
         autorDao.deleteAutor(autorDao.retrieveAutor("Tavin").get_id_autor());

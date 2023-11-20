@@ -9,7 +9,7 @@ public class Categoria {
 		return id_categoria;
 	}
 
-	public void set_id_categoria() {
+	public void set_id_categoria(int id_categoria) {
 		this.id_categoria = id_categoria;
 	}
 
@@ -26,9 +26,7 @@ public class Categoria {
 	}
 
 	public Categoria(int id_categoria, String nome) {
-		this.id_categoria = id_categoria;
 		this.nome = nome;
+		this.id_categoria = id_categoria;
 	}
-	
-	
 }
