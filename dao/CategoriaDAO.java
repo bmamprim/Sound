@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import modelo.Categoria;
 
@@ -35,10 +36,57 @@ public class CategoriaDAO {
             throw new RuntimeException(e);
         }
     };
-    public void retrieveCategoria() {
-    	
+    public Categoria retrieveCategoria(String nome_categoria) {
+    	try {
+            String sql = "SELECT * FROM Categoria WHERE nome_cat === ?";
+
+            Categoria categoria;
+
+            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                pstm.setString(1, nome_categoria);
+                pstm.execute();
+
+                ResultSet result = pstm.getResultSet();
+
+                int id = result.getInt("id_categoria");
+                String nome = result.getString("nome_cat");
+                
+                categoria = new Categoria(id, nome);
+
+            }
+
+            return categoria;
+        } catch (SQLException e) {
+             throw new RuntimeException(e);
+        }
     };
-    public void retrieveAllCategorias() {
+    
+    public ArrayList<Categoria> retrieveAllCategorias() {
+    	
+    	ArrayList<Categoria> categorias = new ArrayList<Categoria>();
+
+        try {
+            String sql = "SELECT * FROM Categoria";
+
+            try(PreparedStatement pstm = connection.prepareStatement(sql)) {
+                pstm.execute();
+
+                ResultSet result = pstm.getResultSet();
+
+                while (result.next()) {
+                    int id = result.getInt("id_categoria");
+                    String nome = result.getString("nome_cat");
+                    
+                    Categoria categoria = new Categoria(id, nome);
+                    categorias.add(categoria);
+                }
+
+            }
+
+            return categorias;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     	
     };
     public void deleteCategoria(int id) {
