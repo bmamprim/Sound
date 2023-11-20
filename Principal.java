@@ -5,6 +5,12 @@ import java.sql.SQLException;
 // import java.util.ArrayList;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import Interface.InterfaceCreate;
 import modelo.Autor;
 // import modelo.Pessoa;
 // import modelo.Telefone;
@@ -12,11 +18,46 @@ import modelo.Autor;
 import dao.AutorDAO;
 import dao.ConnectionFactory;
 // import dao.PessoaDAO;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
-public class Principal{
+public class Principal extends JFrame{
+    public Principal() {
+        super("Inicio");
+    }
+    public static void main(String[] args) throws SQLException{
+        // comentei pq ainda n ta pronto, qnd estiver a gente testa
+        // JFrame f = new JFrame();
+        // JButton btnAtualizarAutor = new JButton("Atualizar Autor");
+        // JButton btnAtualizarCategoria = new JButton("Atualizar Categoria");
+        // JButton btnAtualizarMusica = new JButton("Atualizar Musica");
+        // JButton btnListarAutores = new JButton("Listar Autores");
+        // JButton btnListarCategorias = new JButton("Listar Categorias");
+        // JButton btnListarMusicas = new JButton("Listar Musicas");
+        // JButton btnPesquisarAutor = new JButton("Pesquisar Autor");
+        // JButton btnPesquisarCategoria = new JButton("Pesquisar Categoria");
+        // JButton btnPesquisarMusica = new JButton("Pesquisar Musica");
+        // JButton btnDeletarAutor = new JButton("Deletar Autor");
+        // JButton btnDeletarCategoria = new JButton("Deletar Categoria");
+        // JButton btnDeletarMusica = new JButton("Deletar Musica");
 
+        // f.setLayout(new GridLayout(0, 3));
+        // f.setSize(1000, 250);
 
-    public static void main(String[] args) throws SQLException {
+        // f.add(btnAtualizarAutor);
+        // f.add(btnAtualizarCategoria);
+        // f.add(btnAtualizarMusica);
+        // f.add(btnListarAutores);
+        // f.add(btnListarCategorias);
+        // f.add(btnListarMusicas);
+        // f.add(btnPesquisarAutor);
+        // f.add(btnPesquisarCategoria);
+        // f.add(btnPesquisarMusica);
+        // f.add(btnDeletarAutor);
+        // f.add(btnDeletarCategoria);
+        // f.add(btnDeletarMusica);
+
+        // f.setVisible(true);
 
         // Cria os objetos em memoria local
         Autor autor1 = new Autor("11122233344", "Gustavo", "Tavin");
@@ -39,62 +80,19 @@ public class Principal{
         autorDao.createAutor(autor1);
         autorDao.createAutor(autor2);
         autorDao.createAutor(autor3);
-
+        
         ArrayList<Autor> listaAutores = autorDao.retrieveAllAutores();
 
+        Autor autorEspecifico = autorDao.retrieveAutor("Isa");
+
+        System.out.println(autorEspecifico.getCpf());
+
         for(Autor autor : listaAutores) {
-            System.out.println(autor);
+            System.out.println(autor.getCpf());
         }
 
-        // Pessoa pessoa4 = new Pessoa("Joao Correia", "00011122233", LocalDate.of(2003, 4, 15));
-        // Telefone telefone40 = new Telefone(TipoTelefone.Celular,55,21,964695794);
-        // Telefone telefone41 = new Telefone(TipoTelefone.Celular,55,21,96469579);
-        // pessoa4.addTelefone(telefone40);
-        // pessoa4.addTelefone(telefone41);  
-
-        // Pessoa pessoa5 = new Pessoa("Joao Constant", "00011122244", LocalDate.of(2004, 5, 20)); //55 21 999309064
-        // Pessoa pessoa6 = new Pessoa("Matheus Herzog", "00011122255", LocalDate.of(2005, 6, 25)); //55 21 960197272  55 21 96525522
-        // Pessoa pessoa7 = new Pessoa("Thaís Bustamante", "00011122266", LocalDate.of(2000, 7, 30)); //55 21 973013773  55 21 24870553
-        // Pessoa pessoa8 = new Pessoa("Théo Mauricio", "00011122277", LocalDate.of(2001, 8, 01)); //55 24 992675080  55 24 92675080
-        // Pessoa pessoa9 = new Pessoa("Victor Lobianco", "00011122288", LocalDate.of(2002, 9, 05));//55 21 992471219
-
-        // System.out.println(pessoa4);
-        // System.out.println(pessoa5);
-        // System.out.println(pessoa6);
-        // System.out.println(pessoa7);
-        // System.out.println(pessoa8);
-        // System.out.println(pessoa9);
-        
-        // System.out.println("Acabei de printar os objetos em memoria\n\n\n");
-
-        // PessoaDAO pdao = new PessoaDAO(connection);
-    
-        // pdao.createComTelefone(pessoa4);
-        // pdao.createComTelefone(pessoa5);
-        // pdao.createComTelefone(pessoa6);
-        // pdao.createComTelefone(pessoa7);
-        // pdao.createComTelefone(pessoa8);
-        // pdao.createComTelefone(pessoa9);
- 
-        
-        // ArrayList<Pessoa> pessoas =  pdao.retriveAllComTelefone();
-        //ArrayList<Pessoa> pessoas =  pdao.retriveAllSemTelefone();
-
-
-        // System.out.println("Comecei a printar os objetos do BD\n");
-        // for (Pessoa pessoa : pessoas) {
-        //     System.out.println(pessoa);
-        //     for (Telefone telefone : pessoa.getTelefones()) {
-        //         System.out.println(telefone);
-        //     }
-        // }
-    
-        //Exemplo de Injection
-        // Pessoa pessoa10 = new Pessoa("%", "%' UNION SELECT cpf FROM Pessoa WHERE nome LIKE '%", LocalDate.of(2002, 9, 05));
-        // ArrayList<Pessoa> pessoas2 =  pdao.retrieveInjection(pessoa10);
-        // for (Pessoa pessoa : pessoas2) {
-        //     System.out.println(pessoa);
-        // }
+        autorDao.deleteAutor(autorDao.retrieveAutor("Tavin").get_id_autor());
+        autorDao.updateAutor(autorDao.retrieveAutor("Isa"));
     }
 
 }
