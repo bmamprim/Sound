@@ -17,6 +17,8 @@ public class AutorDAO {
         this.connection = connection;
     }
     
+    
+    
     public void createAutor(Autor autor, Musica musica){
         try {
             String sql = "INSERT INTO Autor VALUES (DEFAULT, ?, ?, ?)";
@@ -36,6 +38,8 @@ public class AutorDAO {
                 }
                 
             }
+            
+            if(musica != null) { 
             String sqlRelationship = "INSERT INTO MusicaAutor VALUES (DEFAULT, ?, ?)";
 
             try (PreparedStatement pstm2 = connection.prepareStatement(sqlRelationship, Statement.RETURN_GENERATED_KEYS)) {
@@ -43,6 +47,8 @@ public class AutorDAO {
                 pstm2.setInt(2, autor.get_id_autor());
 
                 pstm2.execute();
+            }
+            
             }
         } catch(SQLException e) {
             throw new RuntimeException(e);

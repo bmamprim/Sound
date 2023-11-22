@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.sql.Date;
 
 import modelo.Autor;
@@ -49,7 +50,7 @@ public class MusicaDAO {
         }
     }
 
-    public Musica retrieveMusica(String titulo) {
+    public Musica retrieveMusica(Musica musica) {
         try {
             String sql = "SELECT * "
             + "FROM Musica AS m " 
@@ -64,11 +65,10 @@ public class MusicaDAO {
             Musica ultimaMusica = null;
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setString(1, titulo);
+                pstm.setString(1, musica.getTitulo());
                 pstm.execute();
 
                 ResultSet result = pstm.getResultSet();
-                System.out.println(result);
 
                 while (result.next()) {
                     if (ultimaMusica == null || ultimaMusica.get_id_musica() != result.getInt(1)) {
@@ -78,8 +78,8 @@ public class MusicaDAO {
                         String letra= result.getString("letra");
                         Categoria nome_categoria = new Categoria(result.getString("nome_cat"));
                         int duracao = result.getInt("duracao");
-                        Musica musica = new Musica(id_musica, nome_musica, letra, data_lancamento, nome_categoria, duracao);
-                        ultimaMusica = musica;
+                        Musica musica1 = new Musica(id_musica, nome_musica, letra, data_lancamento, nome_categoria, duracao);
+                        ultimaMusica = musica1;
                     }
 
                     int autor_id = result.getInt("id_autor");
@@ -97,8 +97,85 @@ public class MusicaDAO {
         }
 
     }
+
+    public ArrayList<Musica> retrieveAllMusicas() {
+    	
+    	
+    	ArrayList<Musica> musicas = new ArrayList<Musica>();
+
+    	try {
+            String sql = "SELECT * "
+            + "FROM Musica AS m " 
+            + "INNER JOIN MusicaAutor AS ma " 
+            + "ON ma.fk_id_musica = m.id_musica "
+            + "INNER JOIN Autor as a "
+            + "ON ma.fk_id_autor = a.id_autor "
+            + "INNER JOIN Categoria as c "
+            + "ON m.categoria_id = c.id_categoria ";
+
+            Musica ultimaMusica = null;
+
+            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+
+                pstm.execute();
+
+                ResultSet result = pstm.getResultSet();
+
+                while (result.next()) {
+                    if (ultimaMusica == null || ultimaMusica.get_id_musica() != result.getInt(1)) {
+                        int id_musica = result.getInt("id_musica");
+                        String nome_musica = result.getString("nome_mus");
+                        Date data_lancamento = result.getDate("data_lancamento");
+                        String letra= result.getString("letra");
+                        Categoria nome_categoria = new Categoria(result.getString("nome_cat"));
+                        int duracao = result.getInt("duracao");
+                        Musica musica1 = new Musica(id_musica, nome_musica, letra, data_lancamento, nome_categoria, duracao);
+                        ultimaMusica = musica1;
+                    }
+
+                    int autor_id = result.getInt("id_autor");
+
+                    String nome_artistico = result.getString("nome_art");
+                    String nome_original = result.getString("nome_orig");
+                    String cpf = result.getString("cpf");
+                    Autor autor = new Autor(autor_id, cpf, nome_original, nome_artistico);
+                    ultimaMusica.addAutor(autor);
+                    
+                    musicas.add(ultimaMusica);
+                }
+            }
+            return musicas;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     
-    
+    public void deleteMusica(Musica musica) {
+        try {
+            String sql = "DELETE FROM Musica WHERE id_musica = ?";
+
+            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                pstm.setInt(1, musica.get_id_musica());
+                pstm.execute();
+            }
+        } catch (SQLException e) {
+             throw new RuntimeException(e);
+        }
+    };
+
+    public void updateMusica(Musica musica) {
+    	try {
+            String sql = "UPDATE Musica SET nome_musica = ? WHERE id_categoria = ?";
+
+            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                pstm.setString(1, musica.getTitulo());
+                pstm.setInt(2, musica.get_id_musica());
+                pstm.execute();
+            }
+        } catch (SQLException e) {
+             throw new RuntimeException(e);
+        }
+    }
 }
 
 
