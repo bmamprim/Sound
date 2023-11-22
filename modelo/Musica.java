@@ -1,12 +1,13 @@
 package modelo;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Musica {
 	
 	private String titulo, letra;
-	private LocalDate data_lancamento;
+	private Date data_lancamento;
 	private Categoria categoria;
 	private int id_musica, duracao;
 	private ArrayList<Autor> autores;
@@ -34,11 +35,11 @@ public class Musica {
 		this.letra = letra;
 	}
 
-	public LocalDate getData_lancamento() {
+	public Date getData_lancamento() {
 		return data_lancamento;
 	}
 
-	public void setData_lancamento(LocalDate data_lancamento) {
+	public void setData_lancamento(Date data_lancamento) {
 		this.data_lancamento = data_lancamento;
 	}
 
@@ -65,8 +66,12 @@ public class Musica {
 	public void setAutores(ArrayList<Autor> autores) {
 		this.autores = autores;
 	}
+
+	public void addAutor(Autor autor) {
+        this.autores.add(autor);
+    }
 	
-	public Musica(int id_musica, String titulo, String letra, LocalDate data_lancamento, Categoria categoria, int duracao,
+	public Musica(int id_musica, String titulo, String letra, Date data_lancamento, Categoria categoria, int duracao,
 			ArrayList<Autor> autores) {
 		this.id_musica = id_musica;
 		this.titulo = titulo;
@@ -77,7 +82,7 @@ public class Musica {
 		this.autores = autores;
 	}
 
-	public Musica(String titulo, String letra, LocalDate data_lancamento, Categoria categoria, int duracao,
+	public Musica(String titulo, String letra, Date data_lancamento, Categoria categoria, int duracao,
 			ArrayList<Autor> autores) {
 		this.titulo = titulo;
 		this.letra = letra;
@@ -85,5 +90,22 @@ public class Musica {
 		this.categoria = categoria;
 		this.duracao = duracao;
 		this.autores = autores;
+	}
+
+	public Musica(int id_musica, String titulo, String letra, Date data_lancamento, Categoria categoria, int duracao) {
+		this.id_musica = id_musica;
+		this.titulo = titulo;
+		this.letra = letra;
+		this.data_lancamento = data_lancamento;
+		this.categoria = categoria;
+		this.duracao = duracao;
+	}
+
+	public Musica(String titulo, String letra, Date data_lancamento, Categoria categoria, int duracao) {
+		this.titulo = titulo;
+		this.letra = letra;
+		this.data_lancamento = data_lancamento;
+		this.categoria = categoria;
+		this.duracao = duracao;
 	}
 }

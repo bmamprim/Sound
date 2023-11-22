@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import modelo.Autor;
+import modelo.Musica;
+import modelo.Telefone;
 
 public class AutorDAO {
     private Connection connection;
@@ -16,15 +18,16 @@ public class AutorDAO {
         this.connection = connection;
     }
     
-    public void createAutor(Autor autor){
+    public void createAutor(Autor autor, Musica musica){
         try {
-            String sql = "INSERT INTO Autor VALUES (DEFAULT, ?, ?, ?)";
+            String sql = "INSERT INTO Autor VALUES (DEFAULT, ?, ?, ?, ?)";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-                pstm.setString(2, autor.getCpf());
-                pstm.setString(3, autor.getNome_original());
-                pstm.setString(4, autor.getNome_artistico());
+                pstm.setString(1, autor.getCpf());
+                pstm.setString(2, autor.getNome_original());
+                pstm.setString(3, autor.getNome_artistico());
+                pstm.setInt(3, musica.get_id_musica());
 
                 pstm.execute();
 
