@@ -12,7 +12,6 @@ import modelo.Autor;
 import modelo.Categoria;
 import modelo.Musica;
 
-
 public class MusicaDAO {
     private Connection connection;
 
@@ -50,22 +49,22 @@ public class MusicaDAO {
         }
     }
 
-    public Musica retrieveMusica(Musica musica) {
+    public Musica retrieveMusica(Musica inputMusica) {
         try {
-            String sql = "SELECT * "
+            String sql = "SELECT m.nome_mus, a.nome_art, c.nome_cat "
             + "FROM Musica AS m " 
             + "INNER JOIN MusicaAutor AS ma " 
             + "ON ma.fk_id_musica = m.id_musica "
             + "INNER JOIN Autor as a "
             + "ON ma.fk_id_autor = a.id_autor "
-            + "INNER JOIN Categoria as c "
+            + "INNER JOIN Caregoria as c "
             + "ON m.categoria_id = c.id_categoria "
             + "WHERE nome_mus = ?";
 
             Musica ultimaMusica = null;
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setString(1, musica.getTitulo());
+                pstm.setString(1, inputMusica.getTitulo());
                 pstm.execute();
 
                 ResultSet result = pstm.getResultSet();
@@ -82,7 +81,7 @@ public class MusicaDAO {
                         ultimaMusica = musica1;
                     }
 
-                    int autor_id = result.getInt("id_autor");
+                    int autor_id = result.getInt("autor_id");
 
                     String nome_artistico = result.getString("nome_art");
                     String nome_original = result.getString("nome_orig");
@@ -177,5 +176,3 @@ public class MusicaDAO {
         }
     }
 }
-
-

@@ -1,98 +1,118 @@
-// import java.security.KeyStore.PasswordProtection;
 import java.sql.Connection;
 import java.sql.SQLException;
-// import java.time.LocalDate;
-// import java.util.ArrayList;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 
-import Interface.InterfaceCreate;
 import modelo.Autor;
-// import modelo.Pessoa;
-// import modelo.Telefone;
-// import modelo.TipoTelefone;
+import modelo.Categoria;
+import modelo.Musica;
 import dao.AutorDAO;
+import dao.CategoriaDAO;
 import dao.ConnectionFactory;
-// import dao.PessoaDAO;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import dao.MusicaDAO;
 
-public class Principal extends JFrame{
-    public Principal() {
-        super("Inicio");
-    }
+public class Principal{
     public static void main(String[] args) throws SQLException{
-        // comentei pq ainda n ta pronto, qnd estiver a gente testa
-        // JFrame f = new JFrame();
-        // JButton btnAtualizarAutor = new JButton("Atualizar Autor");
-        // JButton btnAtualizarCategoria = new JButton("Atualizar Categoria");
-        // JButton btnAtualizarMusica = new JButton("Atualizar Musica");
-        // JButton btnListarAutores = new JButton("Listar Autores");
-        // JButton btnListarCategorias = new JButton("Listar Categorias");
-        // JButton btnListarMusicas = new JButton("Listar Musicas");
-        // JButton btnPesquisarAutor = new JButton("Pesquisar Autor");
-        // JButton btnPesquisarCategoria = new JButton("Pesquisar Categoria");
-        // JButton btnPesquisarMusica = new JButton("Pesquisar Musica");
-        // JButton btnDeletarAutor = new JButton("Deletar Autor");
-        // JButton btnDeletarCategoria = new JButton("Deletar Categoria");
-        // JButton btnDeletarMusica = new JButton("Deletar Musica");
-
-        // f.setLayout(new GridLayout(0, 3));
-        // f.setSize(1000, 250);
-
-        // f.add(btnAtualizarAutor);
-        // f.add(btnAtualizarCategoria);
-        // f.add(btnAtualizarMusica);
-        // f.add(btnListarAutores);
-        // f.add(btnListarCategorias);
-        // f.add(btnListarMusicas);
-        // f.add(btnPesquisarAutor);
-        // f.add(btnPesquisarCategoria);
-        // f.add(btnPesquisarMusica);
-        // f.add(btnDeletarAutor);
-        // f.add(btnDeletarCategoria);
-        // f.add(btnDeletarMusica);
-
-        // f.setVisible(true);
-
         // Cria os objetos em memoria local
         Autor autor1 = new Autor("11122233344", "Gustavo", "Tavin");
         Autor autor2 = new Autor("12345678909", "Isabelle", "Isa");
         Autor autor3 = new Autor("00011122233", "Lucas", "Serejo");
 
-        System.out.println(autor1);
-        System.out.println(autor2);
-        System.out.println(autor3);
+        Musica musica1 = new Musica();
+        Musica musica2 = new Musica();
+        Musica musica3 = new Musica();
 
-        System.out.println("Acabei de printar os objetos em memoria\n\n\n");
+        Categoria categoria1 = new Categoria();
+        Categoria categoria2 = new Categoria();
+        Categoria categoria3 = new Categoria();
 
+        // Estabelece a conexao com o db
         ConnectionFactory connectionFactory = new ConnectionFactory();
         Connection connection = connectionFactory.recuperaConexao();
 
-        // Define o objeto DAO, onde ficam as funcoes que vamos chamar 
+        // Instancia os objetos DAO
         AutorDAO autorDao = new AutorDAO(connection);
+        MusicaDAO musicaDao = new MusicaDAO(connection);
+        CategoriaDAO categoriaDao = new CategoriaDAO(connection);
 
-        // envia cada objeto criado em memoria para a funcao que cria autor no banco
-        autorDao.createAutor(autor1);
-        autorDao.createAutor(autor2);
-        autorDao.createAutor(autor3);
+        // Metodos de insercao no db
+        autorDao.createAutor(autor1, null);
+        autorDao.createAutor(autor2, null);
+        autorDao.createAutor(autor3, null);
+
+        musicaDao.createMusica(musica1);
+        musicaDao.createMusica(musica2);
+        musicaDao.createMusica(musica3);
+
+        categoriaDao.createCategoria(categoria1);
+        categoriaDao.createCategoria(categoria2);
+        categoriaDao.createCategoria(categoria3);
         
+        // Metodos de listagem das linhas
         ArrayList<Autor> listaAutores = autorDao.retrieveAllAutores();
-
-        Autor autorEspecifico = autorDao.retrieveAutor("Isa");
-
-        System.out.println(autorEspecifico.getCpf());
+        ArrayList<Musica> listaMusicas = musicaDao.retrieveAllMusicas();
+        ArrayList<Categoria> listaCategorias = categoriaDao.retrieveAllCategorias();
 
         for(Autor autor : listaAutores) {
             System.out.println(autor.getCpf() + " - " + autor.getNome_original() + " - " + autor.getNome_artistico());
         }
 
-        autorDao.deleteAutor(autorDao.retrieveAutor("Tavin").get_id_autor());
-        autorDao.updateAutor(autorDao.retrieveAutor("Isa"));
+        for(Musica musica : listaMusicas) {
+            System.out.println(musica.getTitulo() + " - " + musica.getDuracao() + " - " + musica.getCategoria().getNome());
+        }
+
+        for(Categoria categoria : listaCategorias) {
+            System.out.println(categoria.get_id_categoria() + " - " + categoria.getNome());
+        }
+
+        // Metodos de consulta de um dado especifico
+        Autor autorEspecifico = autorDao.retrieveAutor("Isa");
+        Musica musicaEspecifica = musicaDao.retrieveMusica("Bang");
+        Categoria categoriaEspecifica = categoriaDao.retrieveCategoria("Sertanejo");
+
+        System.out.println(autorEspecifico.getCpf());
+        System.out.println(musicaEspecifica.getAutores().get(0).getNome_artistico());
+        System.out.println(categoriaEspecifica.get_id_categoria());
+
+        // Metodos de deleçao
+        autorDao.deleteAutor(autorDao.retrieveAutor(autor1));
+        musicaDao.deleteMusica(musicaDao.retrieveMusica(musica1));
+        categoriaDao.deleteCategoria(categoriaDao.retrieveCategoria(categoria1));
+
+        for(Autor autor : listaAutores) {
+            System.out.println(autor.getCpf() + " - " + autor.getNome_original() + " - " + autor.getNome_artistico());
+        }
+
+        for(Musica musica : listaMusicas) {
+            System.out.println(musica.getTitulo() + " - " + musica.getDuracao() + " - " + musica.getCategoria().getNome());
+        }
+
+        for(Categoria categoria : listaCategorias) {
+            System.out.println(categoria.get_id_categoria() + " - " + categoria.getNome());
+        }
+
+        // Metodos de atualizacao
+        Autor autor1Update = new Autor(1, "11122233344", "Gustavo", "Tavin");
+        Musica musica1Update = new Musica();
+        Categoria categoria1Update = new Categoria();
+
+        autorDao.updateAutor(autorDao.retrieveAutor(autor1Update));
+        musicaDao.updateMusica(musicaDao.retrieveMusica(musica1Update));
+        categoriaDao.updateCategoria(categoriaDao.retrieveCategoria(categoria1Update));
+
+        for(Autor autor : listaAutores) {
+            System.out.println(autor.getCpf() + " - " + autor.getNome_original() + " - " + autor.getNome_artistico());
+        }
+
+        for(Musica musica : listaMusicas) {
+            System.out.println(musica.getTitulo() + " - " + musica.getDuracao() + " - " + musica.getCategoria().getNome());
+        }
+
+        for(Categoria categoria : listaCategorias) {
+            System.out.println(categoria.get_id_categoria() + " - " + categoria.getNome());
+        }
+
     }
 
 }

@@ -55,14 +55,14 @@ public class AutorDAO {
         }
     };
 
-    public Autor retrieveAutor(String nomeArtistico) {
+    public Autor retrieveAutor(Autor autorInput) {
         try {
             String sql = "SELECT * FROM Autor WHERE nome_art === ?";
 
             Autor autor;
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setString(1, nomeArtistico);
+                pstm.setString(1, autorInput.getNome_artistico());
                 pstm.execute();
 
                 ResultSet result = pstm.getResultSet();
