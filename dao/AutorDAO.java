@@ -39,39 +39,43 @@ public class AutorDAO {
                 
             }
             
-            if(musica != null) { 
-            String sqlRelationship = "INSERT INTO MusicaAutor VALUES (DEFAULT, ?, ?)";
+      
+            
+            if (musica != null) {
+            	String sqlRelationship = "INSERT INTO MusicaAutor VALUES (DEFAULT, ?, ?)";
 
-            try (PreparedStatement pstm2 = connection.prepareStatement(sqlRelationship, Statement.RETURN_GENERATED_KEYS)) {
-                pstm2.setInt(1, musica.get_id_musica());
-                pstm2.setInt(2, autor.get_id_autor());
+                try (PreparedStatement pstm2 = connection.prepareStatement(sqlRelationship, Statement.RETURN_GENERATED_KEYS)) {
+                    pstm2.setInt(1, musica.get_id_musica());
+                    pstm2.setInt(2, autor.get_id_autor());
 
-                pstm2.execute();
+                    pstm2.execute();
+                }	
             }
             
-            }
         } catch(SQLException e) {
             throw new RuntimeException(e);
         }
     };
 
-    public Autor retrieveAutor(Autor autorInput) {
+    public Autor retrieveAutor(String nome_autor) {
         try {
-            String sql = "SELECT * FROM Autor WHERE nome_art === ?";
+            String sql = "SELECT * FROM Autor WHERE nome_art = ?";
 
-            Autor autor;
+            Autor autor = null;
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setString(1, autorInput.getNome_artistico());
+                pstm.setString(1, nome_autor);
                 pstm.execute();
 
                 ResultSet result = pstm.getResultSet();
 
-                int id = result.getInt("id_autor");
-                String cpf = result.getString("cpf");
-                String nome_original = result.getString("nome_orig");
-                String nome_artistico = result.getString("nome_art");
-                autor = new Autor(id, cpf, nome_original, nome_artistico);
+                while (result.next()) {
+	                int id = result.getInt("id_autor");
+	                String cpf = result.getString("cpf");
+	                String nome_original = result.getString("nome_orig");
+	                String nome_artistico = result.getString("nome_art");
+	                autor = new Autor(id, cpf, nome_original, nome_artistico);
+                }
 
             }
 
@@ -110,12 +114,12 @@ public class AutorDAO {
         }
     };
 
-    public void deleteAutor(int id) {
+    public void deleteAutor(Autor autor) {
         try {
-            String sql = "DELETE FROM Autor WHERE id_autor === ?";
+            String sql = "DELETE FROM Autor WHERE id_autor = ?";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setInt(1, id);
+                pstm.setInt(1, autor.get_id_autor());
                 pstm.execute();
             }
         } catch (SQLException e) {
@@ -125,7 +129,7 @@ public class AutorDAO {
 
     public void updateAutor(Autor autor) {
          try {
-            String sql = "UPDATE Autor SET cpf = ?, nome_art = ?, nome_orig = ? WHERE id_autor === ?";
+            String sql = "UPDATE Autor SET cpf = ?, nome_art = ?, nome_orig = ? WHERE id_autor = ?";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
                 pstm.setString(1, autor.getCpf());

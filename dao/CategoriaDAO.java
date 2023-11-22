@@ -40,7 +40,7 @@ public class CategoriaDAO {
     	try {
             String sql = "SELECT * FROM Categoria WHERE nome_cat = ?";
 
-            Categoria categoria = null;
+            Categoria categoria1 = null;
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
                 pstm.setString(1, nome_categoria);
@@ -52,10 +52,10 @@ public class CategoriaDAO {
                 	int id = result.getInt("id_categoria");
                 	String nome = result.getString("nome_cat");
                 	
-                	categoria = new Categoria(id, nome);
+                	categoria1 = new Categoria(id, nome);
                 }
             }
-            return categoria;
+            return categoria1;
 
         } catch (SQLException e) {
              throw new RuntimeException(e);

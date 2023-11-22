@@ -19,13 +19,18 @@ public class Principal{
         Autor autor2 = new Autor("12345678909", "Isabelle", "Isa");
         Autor autor3 = new Autor("00011122233", "Lucas", "Serejo");
 
-        Musica musica1 = new Musica();
-        Musica musica2 = new Musica();
-        Musica musica3 = new Musica();
-
-        Categoria categoria1 = new Categoria();
-        Categoria categoria2 = new Categoria();
-        Categoria categoria3 = new Categoria();
+        Categoria categoria1 = new Categoria("Pop");
+        Categoria categoria2 = new Categoria("Funk");
+        Categoria categoria3 = new Categoria("Rock");
+        
+        ArrayList<Autor> autores1 = new ArrayList<Autor>();
+        
+        autores1.add(autor3);
+        autores1.add(autor1);
+        
+        Musica musica1 = new Musica("A", "a", java.sql.Date.valueOf("2003-10-20"), categoria1, 100, autores1);
+        Musica musica2 = new Musica("B", "b", java.sql.Date.valueOf("2003-10-20"), categoria2, 100, autores1);
+        Musica musica3 = new Musica("C", "c", java.sql.Date.valueOf("2003-10-20"), categoria3, 100, autores1);
 
         // Estabelece a conexao com o db
         ConnectionFactory connectionFactory = new ConnectionFactory();
@@ -40,14 +45,15 @@ public class Principal{
         autorDao.createAutor(autor1, null);
         autorDao.createAutor(autor2, null);
         autorDao.createAutor(autor3, null);
+        
+        categoriaDao.createCategoria(categoria1);
+        categoriaDao.createCategoria(categoria2);
+        categoriaDao.createCategoria(categoria3);
 
         musicaDao.createMusica(musica1);
         musicaDao.createMusica(musica2);
         musicaDao.createMusica(musica3);
 
-        categoriaDao.createCategoria(categoria1);
-        categoriaDao.createCategoria(categoria2);
-        categoriaDao.createCategoria(categoria3);
         
         // Metodos de listagem das linhas
         ArrayList<Autor> listaAutores = autorDao.retrieveAllAutores();
@@ -68,17 +74,17 @@ public class Principal{
 
         // Metodos de consulta de um dado especifico
         Autor autorEspecifico = autorDao.retrieveAutor("Isa");
-        Musica musicaEspecifica = musicaDao.retrieveMusica("Bang");
-        Categoria categoriaEspecifica = categoriaDao.retrieveCategoria("Sertanejo");
+        Musica musicaEspecifica = musicaDao.retrieveMusica("A");
+        Categoria categoriaEspecifica = categoriaDao.retrieveCategoria("Pop");
 
         System.out.println(autorEspecifico.getCpf());
-        System.out.println(musicaEspecifica.getAutores().get(0).getNome_artistico());
+        System.out.println(musicaEspecifica.getTitulo());
         System.out.println(categoriaEspecifica.get_id_categoria());
 
         // Metodos de deleçao
-        autorDao.deleteAutor(autorDao.retrieveAutor(autor1));
-        musicaDao.deleteMusica(musicaDao.retrieveMusica(musica1));
-        categoriaDao.deleteCategoria(categoriaDao.retrieveCategoria(categoria1));
+        autorDao.deleteAutor(autor1);
+        musicaDao.deleteMusica(musica1);
+        categoriaDao.deleteCategoria(categoria1);
 
         for(Autor autor : listaAutores) {
             System.out.println(autor.getCpf() + " - " + autor.getNome_original() + " - " + autor.getNome_artistico());
@@ -93,13 +99,13 @@ public class Principal{
         }
 
         // Metodos de atualizacao
-        Autor autor1Update = new Autor(1, "11122233344", "Gustavo", "Tavin");
-        Musica musica1Update = new Musica();
-        Categoria categoria1Update = new Categoria();
+        Autor autor1Update = new Autor(1, "11122233344", "Murilo", "Bestooga");
+        Musica musica1Update = new Musica(1, "D", "a", java.sql.Date.valueOf("2003-10-20"), categoria1, 100);
+        Categoria categoria1Update = new Categoria(1, "Clássica");
 
-        autorDao.updateAutor(autorDao.retrieveAutor(autor1Update));
-        musicaDao.updateMusica(musicaDao.retrieveMusica(musica1Update));
-        categoriaDao.updateCategoria(categoriaDao.retrieveCategoria(categoria1Update));
+        autorDao.updateAutor(autor1Update);
+        musicaDao.updateMusica(musica1Update);
+        categoriaDao.updateCategoria(categoria1Update);
 
         for(Autor autor : listaAutores) {
             System.out.println(autor.getCpf() + " - " + autor.getNome_original() + " - " + autor.getNome_artistico());
