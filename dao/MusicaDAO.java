@@ -5,15 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.sql.Date;
 
 import modelo.Autor;
 import modelo.Categoria;
 import modelo.Musica;
-import modelo.Pessoa;
-import modelo.Telefone;
-import modelo.TipoTelefone;
+
 
 public class MusicaDAO {
     private Connection connection;
@@ -24,12 +21,16 @@ public class MusicaDAO {
 
     public void createMusica(Musica musica) {
         try {
-            String sql = "INSERT INTO Musica VALUES (default, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Musica VALUES (default, ?, ?, ?, ?, ?); ";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
                 pstm.setString(1, musica.getTitulo());
                 pstm.setDate(2, musica.getData_lancamento());
+                pstm.setInt(3, musica.getCategoria().get_id_categoria());
+                pstm.setString(4, musica.getLetra());
+                pstm.setInt(5, musica.getDuracao());
+                
                 pstm.execute();
 
                 try (ResultSet rst = pstm.getGeneratedKeys()) {
@@ -38,6 +39,7 @@ public class MusicaDAO {
                         for(Autor autor : musica.getAutores()) {
                             AutorDAO autorDAO = new AutorDAO(connection);
                             autorDAO.createAutor(autor, musica);
+                            
                         }
                     }
                 }
@@ -49,7 +51,15 @@ public class MusicaDAO {
 
     public Musica retrieveMusica(String titulo) {
         try {
-            String sql = "SELECT m.nome_mus, a.nome_art, c.nome_cat FROM Musica AS m INNER JOIN Autor AS a ON m.autor_id = a.id_autor INNER JOIN Categoria as c ON m.categoria_id = c.id_categoria WHERE nome_mus = ?";
+            String sql = "SELECT * "
+            + "FROM Musica AS m " 
+            + "INNER JOIN MusicaAutor AS ma " 
+            + "ON ma.fk_id_musica = m.id_musica "
+            + "INNER JOIN Autor as a "
+            + "ON ma.fk_id_autor = a.id_autor "
+            + "INNER JOIN Categoria as c "
+            + "ON m.categoria_id = c.id_categoria "
+            + "WHERE nome_mus = ?";
 
             Musica ultimaMusica = null;
 
@@ -58,6 +68,7 @@ public class MusicaDAO {
                 pstm.execute();
 
                 ResultSet result = pstm.getResultSet();
+                System.out.println(result);
 
                 while (result.next()) {
                     if (ultimaMusica == null || ultimaMusica.get_id_musica() != result.getInt(1)) {
@@ -71,7 +82,7 @@ public class MusicaDAO {
                         ultimaMusica = musica;
                     }
 
-                    int autor_id = result.getInt("autor_id");
+                    int autor_id = result.getInt("id_autor");
 
                     String nome_artistico = result.getString("nome_art");
                     String nome_original = result.getString("nome_orig");
@@ -86,4 +97,8 @@ public class MusicaDAO {
         }
 
     }
+    
+    
 }
+
+

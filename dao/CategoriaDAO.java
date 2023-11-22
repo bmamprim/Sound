@@ -38,9 +38,9 @@ public class CategoriaDAO {
     };
     public Categoria retrieveCategoria(String nome_categoria) {
     	try {
-            String sql = "SELECT * FROM Categoria WHERE nome_cat === ?";
+            String sql = "SELECT * FROM Categoria WHERE nome_cat = ?";
 
-            Categoria categoria;
+            Categoria categoria = null;
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
                 pstm.setString(1, nome_categoria);
@@ -48,14 +48,15 @@ public class CategoriaDAO {
 
                 ResultSet result = pstm.getResultSet();
 
-                int id = result.getInt("id_categoria");
-                String nome = result.getString("nome_cat");
-                
-                categoria = new Categoria(id, nome);
-
+                while(result.next()) {
+                	int id = result.getInt("id_categoria");
+                	String nome = result.getString("nome_cat");
+                	
+                	categoria = new Categoria(id, nome);
+                }
             }
-
             return categoria;
+
         } catch (SQLException e) {
              throw new RuntimeException(e);
         }
@@ -89,12 +90,12 @@ public class CategoriaDAO {
         }
     	
     };
-    public void deleteCategoria(int id) {
+    public void deleteCategoria(Categoria categoria) {
         try {
-            String sql = "DELETE FROM Categoria WHERE id_categoria === ?";
+            String sql = "DELETE FROM Categoria WHERE id_categoria = ?";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.setInt(1, id);
+                pstm.setInt(1, categoria.get_id_categoria());
                 pstm.execute();
             }
         } catch (SQLException e) {
@@ -103,7 +104,7 @@ public class CategoriaDAO {
     };
     public void updateCategoria(Categoria categoria) {
         try {
-            String sql = "UPDATE Autor SET nome_cat = ? WHERE id_categoria === ?";
+            String sql = "UPDATE Categoria SET nome_cat = ? WHERE id_categoria = ?";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
                 pstm.setString(1, categoria.getNome());

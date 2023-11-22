@@ -68,7 +68,7 @@ public class Musica {
 	}
 
 	public void addAutor(Autor autor) {
-        this.autores.add(autor);
+		this.autores.add(autor);
     }
 	
 	public Musica(int id_musica, String titulo, String letra, Date data_lancamento, Categoria categoria, int duracao,
@@ -99,6 +99,7 @@ public class Musica {
 		this.data_lancamento = data_lancamento;
 		this.categoria = categoria;
 		this.duracao = duracao;
+		this.autores = new ArrayList <Autor>();
 	}
 
 	public Musica(String titulo, String letra, Date data_lancamento, Categoria categoria, int duracao) {
@@ -107,5 +108,6 @@ public class Musica {
 		this.data_lancamento = data_lancamento;
 		this.categoria = categoria;
 		this.duracao = duracao;
+		this.autores = new ArrayList <Autor>();
 	}
 }
